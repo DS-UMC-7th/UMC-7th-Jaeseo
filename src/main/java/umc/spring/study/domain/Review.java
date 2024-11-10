@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC) //퍼블릭으로 변경
 @AllArgsConstructor
 public class Review extends BaseEntity {
 
@@ -32,4 +32,23 @@ public class Review extends BaseEntity {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Review_image> reviewImageList=new ArrayList<>();
+
+    public void setMemberId(Member member) {
+        this.member=member;
+    }
+
+    public void setStoreId(Store store) {
+        this.store=store;
+    }
+
+    public void setBody(String body) {
+        this.body=body;
+    }
+
+    public void setScore(Float score) {
+        this.score = score;
+    }
+
+
+
 }

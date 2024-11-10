@@ -43,12 +43,14 @@ public class Member extends BaseEntity {
     private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(15) DEFAULT `ACTIVE`")
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'")
     private MemberStatus status;
 
     private LocalDate inactiveDate;
     @Column(nullable = false, length = 50)
     private String email;
+
+    @Column(nullable = false, length = 255)
     private Integer point;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
