@@ -2,15 +2,15 @@ package umc.spring.study.repository.MemberMissionRepository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import umc.spring.study.Dto.MemberMissionDto;
 import umc.spring.study.domain.QMission;
 import umc.spring.study.domain.QRegion;
 import umc.spring.study.domain.QStore;
 import umc.spring.study.domain.enums.MissionStatus;
 import umc.spring.study.domain.mapping.QMemberMission;
-import umc.spring.study.repository.MemberMissionRepository.MemberMissionRepositoryCustom;
+import umc.spring.study.web.dto.MemberMissionDto;
 
 import java.util.List;
+
 
 public class MemberMissionRepositoryCustomImpl implements MemberMissionRepositoryCustom {
 

@@ -1,8 +1,8 @@
 package umc.spring.study.service.MyPageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import umc.spring.study.Dto.MyPageDto;
 import umc.spring.study.repository.MemberRepository.MemberRepository;
+import umc.spring.study.web.dto.MyPageDto;
 
 public class MyPageService {
 

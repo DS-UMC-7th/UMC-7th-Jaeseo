@@ -1,4 +1,4 @@
-package umc.spring.study.Dto;
+package umc.spring.study.web.dto;
 
 import java.time.LocalDateTime;
 
