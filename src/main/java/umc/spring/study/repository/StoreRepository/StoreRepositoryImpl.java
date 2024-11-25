@@ -13,8 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
+
+
     private final JPAQueryFactory jpaQueryFactory;
     private final QStore store = QStore.store;
+
+    
 
     @Override
     public List<Store> dynamicQueryWithBooleanBuilder(String name, Float score) {
@@ -32,5 +36,13 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                 .selectFrom(store)
                 .where(predicate)
                 .fetch();
+    }
+
+    public boolean existsById(Long storeId) {
+        return jpaQueryFactory
+                .selectOne()
+                .from(store)
+                .where(store.id.eq(storeId))
+                .fetchFirst() != null;
     }
 }

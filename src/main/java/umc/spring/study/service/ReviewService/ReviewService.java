@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import umc.spring.study.domain.Member;
 import umc.spring.study.domain.Review;
-import umc.spring.study.domain.Store;
 import umc.spring.study.repository.MemberRepository.MemberRepository;
 import umc.spring.study.repository.ReviewRepository.ReviewRepository;
 import umc.spring.study.repository.StoreRepository.StoreRepository;
+import umc.spring.study.web.dto.ReviewRequest;
+
 @Service
 public class ReviewService {
 
@@ -22,22 +23,21 @@ public class ReviewService {
         this.storeRepository = storeRepository;
     }
 
-    public void addReview(Long memberId, Long storeId, String body, float score) {
-        // memberId와 storeId로 Member와 Store 객체를 조회합니다.
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberId));
-        Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid store ID: " + storeId));
+    public void addReview(ReviewRequest reviewRequest) {
+        // Member 검증 및 조회
+        Member member = memberRepository.findById(reviewRequest.getMemberId())
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
-        // Review 객체 생성 및 값 설정
-        Review review = new Review();
-        review.setMemberId(member);  // Member 객체 설정
-        review.setStoreId(store);    // Store 객체 설정
-        review.setBody(body);
-        review.setScore(score);
+        // Store 검증은 @StoreExists 어노테이션으로 처리됨
 
+        // Review 생성 및 저장
+        Review review = Review.builder()
+                .body(reviewRequest.getBody())
+                .score(reviewRequest.getScore())
+                .store(storeRepository.getReferenceById(reviewRequest.getStoreId()))
+                .member(member)
+                .build();
 
-        // 리뷰 저장
-        reviewRepository.saveReview(review);
+        reviewRepository.save(review);
     }
 }

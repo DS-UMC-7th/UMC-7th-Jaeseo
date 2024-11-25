@@ -2,6 +2,7 @@ package umc.spring.study.repository.MemberMissionRepository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import umc.spring.study.domain.QMission;
 import umc.spring.study.domain.QRegion;
 import umc.spring.study.domain.QStore;
@@ -11,14 +12,14 @@ import umc.spring.study.web.dto.MemberMissionDto;
 
 import java.util.List;
 
-
+@RequiredArgsConstructor
 public class MemberMissionRepositoryCustomImpl implements MemberMissionRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public MemberMissionRepositoryCustomImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory=queryFactory;
-    }
+//    public MemberMissionRepositoryCustomImpl(JPAQueryFactory queryFactory) {
+//        this.queryFactory=queryFactory;
+//    }
 
     public List<MemberMissionDto> findMemberMissions(Long memberId, int limit, int offset) {
         QMemberMission memberMission = QMemberMission.memberMission;
@@ -49,6 +50,17 @@ public class MemberMissionRepositoryCustomImpl implements MemberMissionRepositor
                 .offset(offset)
                 .limit(limit)
                 .fetch();
+    }
+
+    @Override
+    public boolean existsByMissionId(Long missionId) {
+        QMemberMission memberMission = QMemberMission.memberMission;
+
+        return queryFactory
+                .selectOne()
+                .from(memberMission)
+                .where(memberMission.mission.id.eq(missionId))
+                .fetchFirst() != null;
     }
 
 }

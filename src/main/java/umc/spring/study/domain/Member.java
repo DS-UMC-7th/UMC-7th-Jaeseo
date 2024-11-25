@@ -1,10 +1,9 @@
 package umc.spring.study.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import umc.spring.study.domain.common.BaseEntity;
 import umc.spring.study.domain.enums.Gender;
 import umc.spring.study.domain.enums.MemberStatus;
@@ -19,10 +18,13 @@ import java.util.List;
 
 @Entity
 @Getter
+@DynamicUpdate
+@DynamicInsert
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 // 자바의 빌더 패턴
-public class Member extends BaseEntity {
+public class Member extends BaseEntity { //DynamicUpdate와 Insert는 인서트와 업데이트시 null인 경우는 그냥 쿼리를 안보냄
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,11 +49,11 @@ public class Member extends BaseEntity {
     private MemberStatus status;
 
     private LocalDate inactiveDate;
-    @Column(nullable = false, length = 50)
+    // @Column(nullable = false, length = 50) 소셜로그인 없이 진행하므로 일단 주석처리
     private String email;
 
-    @Column(nullable = false, length = 255)
-    private Integer point;
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0", length = 255)
+    private Integer point=0;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberAgree> memberAgreeList = new ArrayList<>();

@@ -3,7 +3,9 @@ package umc.spring.study.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import umc.spring.study.domain.Region;
 import umc.spring.study.domain.Store;
+import umc.spring.study.repository.RegionRepository.RegionRepository;
 import umc.spring.study.repository.StoreRepository.StoreRepository;
 
 import java.util.ArrayList;
@@ -12,10 +14,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class StoreQueryServiceImpl implements StoreQueryService {
 
     private final StoreRepository storeRepository;
+    private final RegionRepository regionRepository;
 
     @Override
     public Optional<Store> findStore(Long id) {
@@ -33,5 +36,22 @@ public class StoreQueryServiceImpl implements StoreQueryService {
         filteredStores.forEach(store -> System.out.println("Store: " + store));
 
         return filteredStores;
+    }
+    @Transactional
+    public Store addStore(String regionName, String storeName, String storeAddress, Float score) {
+        // 1.지역 조회
+        Region region = regionRepository.findByName(regionName)
+                .orElseThrow(() -> new IllegalArgumentException("해당 지역을 찾을 수 없습니다: " + regionName));
+
+        // 2. 가게 생성
+        Store store = Store.builder()
+                .name(storeName)
+                .address(storeAddress)
+                .score(score)
+                .region(region)
+                .build();
+
+        // 3. 가게 저장
+        return storeRepository.save(store);
     }
 }

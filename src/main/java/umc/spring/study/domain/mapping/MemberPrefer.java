@@ -6,8 +6,6 @@ import umc.spring.study.domain.Food_category;
 import umc.spring.study.domain.Member;
 import umc.spring.study.domain.common.BaseEntity;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Builder
@@ -27,6 +25,16 @@ public class MemberPrefer extends BaseEntity {
     @JoinColumn(name="category_id")
     private Food_category foodCategory;
 
+    public void setMember(Member member){
+        if(this.member != null)
+            member.getMemberPreferList().remove(this);
+        this.member = member;
+        member.getMemberPreferList().add(this);
+    }
+
+    public void setFoodCategory(Food_category foodCategory){
+        this.foodCategory = foodCategory;
+    }
 
 
 
