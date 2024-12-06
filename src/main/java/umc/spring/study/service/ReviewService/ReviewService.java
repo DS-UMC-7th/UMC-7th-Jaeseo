@@ -8,6 +8,10 @@ import umc.spring.study.repository.MemberRepository.MemberRepository;
 import umc.spring.study.repository.ReviewRepository.ReviewRepository;
 import umc.spring.study.repository.StoreRepository.StoreRepository;
 import umc.spring.study.web.dto.ReviewRequest;
+import umc.spring.study.web.dto.ReviewResponseDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -39,5 +43,18 @@ public class ReviewService {
                 .build();
 
         reviewRepository.save(review);
+    }
+
+    // 리뷰를 조회하는 기능
+    public List<ReviewResponseDto> getReviewsByMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
+        // Review 리스트 조회
+        List<Review> reviews = reviewRepository.findByMember_IdOrderByCreatedAtDesc(memberId);
+
+        // Review -> ReviewResponseDto 변환
+        return reviews.stream()
+                .map(ReviewResponseDto::fromEntity) // Review -> ReviewResponseDto 변환
+                .collect(Collectors.toList());
     }
 }

@@ -9,6 +9,10 @@ import umc.spring.study.domain.mapping.MemberMission;
 import umc.spring.study.repository.MemberMissionRepository.MemberMissionRepository;
 import umc.spring.study.repository.MemberRepository.MemberRepository;
 import umc.spring.study.repository.MissionRepository.MissionRepository;
+import umc.spring.study.web.dto.MissionResponseDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +44,13 @@ public class MissionService {
                 .status(MissionStatus.CHALLENGING)
                 .build();
         memberMissionRepository.save(memberMission);
+    }
+
+    // 특정 가게의 미션 목록 조회하기
+    public List<MissionResponseDto> getMissionsByStore(Long storeId) {
+        List<Mission> missions = missionRepository.findByStore_Id(storeId);
+        return missions.stream()
+                .map(MissionResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }
